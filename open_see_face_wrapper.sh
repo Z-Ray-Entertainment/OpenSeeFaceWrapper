@@ -85,6 +85,7 @@ check_and_install_dependencies(){
                 install_dependency $i
             else
                 $ZENTIY --title "OpenSeeFace Wrapper" --info --text "Alright, I am exiting now and will not install OpenSeeFace or any of it's dependecies. Have a great day!"
+                kill 0
             fi
         fi
     done
