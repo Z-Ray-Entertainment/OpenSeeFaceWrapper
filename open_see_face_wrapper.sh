@@ -1,4 +1,6 @@
 #!/bin/bash
+PID=$$
+
 ZENTIY="zenity"
 OPEN_SEE_FACE_URL="https://github.com/emilianavt/OpenSeeFace.git"
 ISSUE_URL="https://github.com/VortexAcherontic/OpenSeeFaceWrapper/issues"
@@ -130,7 +132,7 @@ check_and_install_dependencies(){
                 $ZENTIY --title "OpenSeeFace Wrapper" --info --text "$i was installed on to your system, continue."
             else
                 $ZENTIY --title "OpenSeeFace Wrapper" --info --text "Alright, I am exiting now and will not install OpenSeeFace or any of it's dependecies. Have a great day!"
-                kill 0
+                kill $PID
             fi
         fi
     done
@@ -190,7 +192,7 @@ run_open_see_face(){
     source "$PWD/env/bin/activate"
     python facetracker.py -c 1 -W 640 -H 480 --discard-after 0 --scan-every 0 --no-3d-adapt 1 --max-feature-updates 900 -s 1 --port 20202 &
     $ZENTIY --title "OpenSeeFace Wrapper" --info --text "OpenSeeFace is now running. Close this window to also stop OpenSeeFace."
-    kill 0
+    kill $PID
 }
 
 install_complete=$(is_installation_complete)
