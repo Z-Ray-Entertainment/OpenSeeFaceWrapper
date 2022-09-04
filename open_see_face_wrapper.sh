@@ -12,13 +12,13 @@ test_binary() {
 }
 
 install_apt(){
-    $1 "\"apt update\""
-    $1 "\"apt upgrade\""
-    $1 "\"apt install $2\""
+    $1 "\"apt update -y\""
+    $1 "\"apt upgrade -y\""
+    $1 "\"apt install -y $2\""
 }
 
 install_zypper(){
-    $1 "\"zypper in $2\""
+    $1 "\"zypper in -y $2\""
 }
 
 install_dnf(){
