@@ -82,6 +82,8 @@ test_sudo(){
         echo "kdesu -c"
     elif [ $test_gnomesu != "FALSE" ]; then
         echo "gnomesu -c"
+    else
+        echo "sudo"
     fi
 }
 
