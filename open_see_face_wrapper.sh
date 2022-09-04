@@ -1,6 +1,7 @@
 #!/bin/bash
 ZENTIY="zenity"
 OPEN_SEE_FACE_URL="https://github.com/emilianavt/OpenSeeFace.git"
+ISSUE_URL="https://github.com/VortexAcherontic/OpenSeeFaceWrapper/issues"
 
 open_see_face_cloned="FALSE"
 deps_installed="TRUE"
@@ -9,7 +10,14 @@ declare -a dependencies=("git" "python3" "virtualenv" "pip")
 declare -A dep_map_zypper
 dep_map_zypper["git"]="git"
 dep_map_zypper["python3"]="python3"
-dep_map_zypper["virtualenv"]="python3-virtualenv python310-virtualenv"
+dep_map_zypper["virtualenv"]="python3-virtualenv"
+dep_map_zypper["pip"]="pip"
+dep_map_zypper["zenity"]="zenity"
+
+declare -A dep_map_zypper_tumbleweed
+dep_map_zypper["git"]="git"
+dep_map_zypper["python3"]="python3"
+dep_map_zypper["virtualenv"]="python310-virtualenv"
 dep_map_zypper["pip"]="pip"
 dep_map_zypper["zenity"]="zenity"
 
@@ -75,6 +83,10 @@ test_sudo(){
     fi
 }
 
+get_distro_name(){
+    echo $(awk -F= '$1=="PRETTY_NAME" { print $2 ;}' /etc/os-release)
+}
+
 install_dependency(){
     dependency=$1
     test_su_tool=$(test_sudo)
@@ -88,7 +100,17 @@ install_dependency(){
     if [ $test_apt != "FALSE" ]; then
         install_apt "$test_su_tool" "${dep_map_apt[$dependency]}"
     elif [ $test_zypper != "FALSE" ]; then
-        install_zypper "$test_su_tool" "${dep_map_zypper[$dependency]}"
+        if [ $(get_distro_name) == "openSUSE Tumbleweed" ]; then
+            install_zypper "$test_su_tool" "${dep_map_zypper_tumbleweed[$dependency]}"
+        if [ $(get_distro_name) == "openSUSE MicroOS" ]; then
+            install_zypper "$test_su_tool" "${dep_map_zypper_tumbleweed[$dependency]}"
+        elif [ $(get_distro_name) == "openSUSE Leap 15.4" ]
+            install_zypper "$test_su_tool" "${dep_map_zypper[$dependency]}"
+        elif [ $(get_distro_name) == "openSUSE Leap 15.5" ]
+            install_zypper "$test_su_tool" "${dep_map_zypper[$dependency]}"
+        else
+            $ZENTIY --title "OpenSeeFace Wrapper" --error --text "You version of openSUSE is not yet supported. Please open an issue at $ISSUE_URL"
+        fi
     elif [ $test_dnf != "FALSE" ]; then
         install_dnf "$test_su_tool" "${dep_map_dnf[$dependency]}"
     elif [ $test_yum != "FALSE" ]; then
@@ -97,7 +119,7 @@ install_dependency(){
         install_pacman "$test_su_tool" "${dep_map_pacman[$dependency]}"
     else
         echo "There seems to be no supported package manager installed on your system."
-        echo "Please open an issue at: https://github.com/VortexAcherontic/OpenSeeFaceWrapper/issues"
+        echo "Please open an issue at: $ISSUE_URL"
     fi
 }
 
