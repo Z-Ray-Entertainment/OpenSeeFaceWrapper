@@ -173,6 +173,7 @@ clone_open_see_face(){
             git clone $OPEN_SEE_FACE_URL
         else
             $ZENTIY --title "OpenSeeFace Wrapper" --info --text "Alright, I am exiting now and will not install OpenSeeFace or any of it's dependecies. Have a great day!"
+            kill $PID
         fi
 
     fi
@@ -190,8 +191,10 @@ run_open_see_face(){
     cd "./OpenSeeFace"
     virtualenv -p python3 "$PWD/env"
     source "$PWD/env/bin/activate"
-    python facetracker.py -c 1 -W 640 -H 480 --discard-after 0 --scan-every 0 --no-3d-adapt 1 --max-feature-updates 900 -s 1 --port 20202 &
+    python facetracker.py -c 2 -W 640 -H 480 --discard-after 0 --scan-every 0 --no-3d-adapt 1 --max-feature-updates 900 -s 1 --port 20202 &
+    pid_osf=${!}
     $ZENTIY --title "OpenSeeFace Wrapper" --info --text "OpenSeeFace is now running. Close this window to also stop OpenSeeFace."
+    kill $pid_osf
     kill $PID
 }
 
