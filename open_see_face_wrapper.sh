@@ -69,7 +69,7 @@ install_dependency(){
     elif [ $test_pacman != "FALSE" ]; then
         install_pacman "$test_su_tool" "$dependency"
     else
-        echo "There seems to be no supported pakage manager installed on your system."
+        echo "There seems to be no supported package manager installed on your system."
         echo "Please open an issue at: https://github.com/VortexAcherontic/OpenSeeFaceWrapper/issues"
     fi
 }
