@@ -36,3 +36,8 @@ In order to run OpenSeeFace and the script itself it will install the following 
 * virtualenv  
 * pip  
 * zentiy
+
+## Tested on
+This script was tested and found working on the following distributions  
+* openSUSE Tumbleweed  
+* openSUSE Leap 15.4  
