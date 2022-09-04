@@ -149,9 +149,9 @@ run_open_see_face(){
 
 install_complete=$(is_installation_complete)
 if [ $install_complete == "TRUE" ]; then
+    test_and_install_zentiy
     run_open_see_face
 else
-    test_and_install_zentiy
     $ZENTIY --title "OpenSeeFace Wrapper" --info --text "Welcome to OpenSeeFace Wrapper, this tool will install and run OpenSeeFace for you"
     check_and_install_dependencies
     clone_open_see_face
