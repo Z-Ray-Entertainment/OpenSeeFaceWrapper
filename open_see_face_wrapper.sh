@@ -11,14 +11,14 @@ declare -A dep_map_zypper
 dep_map_zypper["git"]="git"
 dep_map_zypper["python3"]="python3"
 dep_map_zypper["virtualenv"]="python3-virtualenv"
-dep_map_zypper["pip"]="pip"
+dep_map_zypper["pip"]="python3-pip"
 dep_map_zypper["zenity"]="zenity"
 
 declare -A dep_map_zypper_tumbleweed
 dep_map_zypper_tumbleweed["git"]="git"
 dep_map_zypper_tumbleweed["python3"]="python3"
 dep_map_zypper_tumbleweed["virtualenv"]="python310-virtualenv"
-dep_map_zypper_tumbleweed["pip"]="pip"
+dep_map_zypper_tumbleweed["pip"]="python310-pip"
 dep_map_zypper_tumbleweed["zenity"]="zenity"
 
 declare -A dep_map_apt
@@ -127,6 +127,7 @@ check_and_install_dependencies(){
             install_confimed=$?
             if [ $install_confimed -eq 0 ]; then
                 install_dependency $i
+                $ZENTIY --title "OpenSeeFace Wrapper" --info --text "$i was installed on to your system, continue."
             else
                 $ZENTIY --title "OpenSeeFace Wrapper" --info --text "Alright, I am exiting now and will not install OpenSeeFace or any of it's dependecies. Have a great day!"
                 kill 0
@@ -143,7 +144,7 @@ test_and_install_zentiy(){
 }
 
 is_installation_complete(){
-    if [ -d "OpenSeeFace" ]; then
+    if [ -d "$PWD/OpenSeeFace" ]; then
         open_see_face_cloned="TRUE"
     fi
 
