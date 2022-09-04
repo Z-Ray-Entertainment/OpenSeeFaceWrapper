@@ -18,7 +18,7 @@ install_apt(){
 }
 
 install_zypper(){
-    $1 "\"zypper in -y $2\""
+    $1 "zypper in -y $2"
 }
 
 install_dnf(){
