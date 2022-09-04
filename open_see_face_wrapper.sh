@@ -110,6 +110,7 @@ install_dependency(){
             install_zypper "$test_su_tool" "${dep_map_zypper[$dependency]}"
         else
             $ZENTIY --title "OpenSeeFace Wrapper" --error --text "You version of openSUSE is not yet supported. Please open an issue at $ISSUE_URL"
+            kill 0
         fi
     elif [ $test_dnf != "FALSE" ]; then
         install_dnf "$test_su_tool" "${dep_map_dnf[$dependency]}"
