@@ -9,7 +9,7 @@ declare -a dependencies=("git" "python3" "virtualenv" "pip")
 declare -A dep_map_zypper
 dep_map_zypper["git"]="git"
 dep_map_zypper["python3"]="python3"
-dep_map_zypper["virtualenv"]="python3-virtualenvwrapper"
+dep_map_zypper["virtualenv"]="python3-virtualenv python310-virtualenv"
 dep_map_zypper["pip"]="pip"
 dep_map_zypper["zenity"]="zenity"
 
