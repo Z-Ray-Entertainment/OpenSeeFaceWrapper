@@ -100,13 +100,14 @@ install_dependency(){
     if [ $test_apt != "FALSE" ]; then
         install_apt "$test_su_tool" "${dep_map_apt[$dependency]}"
     elif [ $test_zypper != "FALSE" ]; then
-        if [ $(get_distro_name) == "openSUSE Tumbleweed" ]; then
+        distro_name=$(get_distro_name)
+        if [ $distro_name == "openSUSE Tumbleweed" ]; then
             install_zypper "$test_su_tool" "${dep_map_zypper_tumbleweed[$dependency]}"
-        elif [ $(get_distro_name) == "openSUSE MicroOS" ]; then
+        elif [ $distro_name == "openSUSE MicroOS" ]; then
             install_zypper "$test_su_tool" "${dep_map_zypper_tumbleweed[$dependency]}"
-        elif [ $(get_distro_name) == "openSUSE Leap 15.4" ]; then
+        elif [ $distro_name == "openSUSE Leap 15.4" ]; then
             install_zypper "$test_su_tool" "${dep_map_zypper[$dependency]}"
-        elif [ $(get_distro_name) == "openSUSE Leap 15.5" ]; then
+        elif [ $distro_name == "openSUSE Leap 15.5" ]; then
             install_zypper "$test_su_tool" "${dep_map_zypper[$dependency]}"
         else
             $ZENTIY --title "OpenSeeFace Wrapper" --error --text "You version of openSUSE is not yet supported. Please open an issue at $ISSUE_URL"
