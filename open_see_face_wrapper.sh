@@ -30,7 +30,7 @@ install_yum(){
 }
 
 install_pacman(){
-    echo "pacman"
+    $1 "\"pacman -Syu $2\""
 }
 
 test_sudo(){
