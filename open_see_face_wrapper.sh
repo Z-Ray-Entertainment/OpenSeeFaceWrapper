@@ -1,5 +1,7 @@
 #!/bin/bash
 PID=$$
+SCRIPT_NAME=$0
+NO_UI="false"
 
 ZENTIY="zenity"
 OPEN_SEE_FACE_URL="https://github.com/emilianavt/OpenSeeFace.git"
@@ -44,6 +46,10 @@ dep_map_pacman["virtualenv"]="python3-virtualenvwrapper"
 dep_map_pacman["pip"]="pip"
 dep_map_pacman["zenity"]="zenity"
 
+if [ "$1" == "--no-ui" ]; then
+    NO_UI="TRUE"
+fi
+
 test_binary() {
     which $1 2>/dev/null || echo FALSE
 }
@@ -70,20 +76,55 @@ install_pacman(){
     $1 "\"pacman -Syu $2\""
 }
 
-test_sudo(){
-    test_xdgsu=$(test_binary "xdg-su")
-    test_kdesu=$(test_binary "kdesu")
-    test_gnomesu=$(test_binary "gnomesu")
+run_in_terminal(){
+    test_gnome_terminal=$(test_binary "gnome-terminal")
+    test_konsole=$(test_binary "konsole")
+    test_xfce_terminal=$(test_binary "xfce4-terminal")
+    test_lxterminal=$(test_binary "lxterminal")
+    test_xterm=$(test_binary "xterm")
+    test_alacritty=$(test_binary "alacritty")
 
-
-    if [ $test_xdgsu != "FALSE" ]; then
-        echo "xdg-su -u root -c"
-    elif [ $test_kdesu != "FALSE" ]; then
-        echo "kdesu -c"
-    elif [ $test_gnomesu != "FALSE" ]; then
-        echo "gnomesu -c"
+    if [ $test_gnome_terminal == "TRUE" ]; then
+        gnome-terminal --tab -- "$PWD/$SCRIPT_NAME --no-ui"
+    elif [ $test_konsole == "TRUE" ]; then
+        konsole -e "$PWD/$SCRIPT_NAME --no-ui"
+    elif [ $test_xfce_terminal == "TRUE" ]; then
+        echo "xfce terminal"
+    elif [ $test_lxterminal == "TRUE" ]; then
+        echo "lxterminal"
+    elif [ $test_xterm == "TRUE" ]; then
+        echo "xterm"
+    elif [ $test_alacritty == "TRUE" ]; then
+        echo "alacritty"
     else
+        if [ "$NO_UI" == "TRUE" ]; then
+            echo "I was not able to identify your terminal emulator. Please run this script manually from a terminal session."
+        else
+            $ZENTIY --title "OpenSeeFace Wrapper" --info --text "I was not able to identify your terminal emulator. Please run this script manually from a terminal session."
+        fi
+    fi
+}
+
+test_su_tool(){
+    if [ "$NO_UI" == "TRUE" ]; then
         echo "sudo"
+    else
+        test_xdgsu=$(test_binary "xdg-su")
+        test_kdesu=$(test_binary "kdesu")
+        test_gnomesu=$(test_binary "gnomesu")
+
+
+        if [ $test_xdgsu != "FALSE" ]; then
+            echo "xdg-su -u root -c"
+        elif [ $test_kdesu != "FALSE" ]; then
+            echo "kdesu -c"
+        elif [ $test_gnomesu != "FALSE" ]; then
+            echo "gnomesu -c"
+        else
+            $ZENTIY --title "OpenSeeFace Wrapper" --info --text "It seems there is no UI based root password confirmation dialog available on your system. \
+            I'll try to run this script from a terminal session."
+            run_in_terminal
+        fi
     fi
 }
 
@@ -93,7 +134,7 @@ get_distro_name(){
 
 install_dependency(){
     dependency=$1
-    test_su_tool=$(test_sudo)
+    test_su_tool=$(test_su_tool)
     test_apt=$(test_binary "apt")
     test_zypper=$(test_binary "zypper")
     test_dnf=$(test_binary "dnf")
@@ -131,9 +172,17 @@ check_and_install_dependencies(){
             install_confimed=$?
             if [ $install_confimed -eq 0 ]; then
                 install_dependency $i
-                $ZENTIY --title "OpenSeeFace Wrapper" --info --text "$i was installed on to your system, continue."
+                if [ "$NO_UI" == "TRUE" ]; then
+                    echo "$i was installed on to your system, continue."
+                else
+                    $ZENTIY --title "OpenSeeFace Wrapper" --info --text "$i was installed on to your system, continue."
+                fi
             else
-                $ZENTIY --title "OpenSeeFace Wrapper" --info --text "Alright, I am exiting now and will not install OpenSeeFace or any of it's dependecies. Have a great day!"
+                if [ "$NO_UI" == "TRUE" ]; then
+                    echo "Alright, I am exiting now and will not install OpenSeeFace or any of it's dependecies. Have a great day!"
+                else
+                    $ZENTIY --title "OpenSeeFace Wrapper" --info --text "Alright, I am exiting now and will not install OpenSeeFace or any of it's dependecies. Have a great day!"
+                fi
                 kill $PID
             fi
         fi
@@ -141,9 +190,11 @@ check_and_install_dependencies(){
 }
 
 test_and_install_zentiy(){
-    test_zenity=$(test_binary "$ZENTIY")
-    if [ $test_zenity == "FALSE" ]; then
-        install_dependency "$ZENTIY"
+    if [ "$NO_UI" == "FALSE" ]; then
+        test_zenity=$(test_binary "$ZENTIY")
+        if [ $test_zenity == "FALSE" ]; then
+            install_dependency "$ZENTIY"
+        fi
     fi
 }
 
