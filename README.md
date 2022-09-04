@@ -18,10 +18,10 @@ Currently it tests for:
 
 When installing packages it also queries the native package manager of your system.  
 Currently supported are:  
-* zypper
+* zypper  
+* apt
 
-Currently in the works are:  
-* apt  
+Currently in the works are:    
 * dnf  
 * yum  
 * pacman
