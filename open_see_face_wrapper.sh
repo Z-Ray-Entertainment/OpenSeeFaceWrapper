@@ -6,6 +6,33 @@ open_see_face_cloned="FALSE"
 deps_installed="TRUE"
 
 declare -a dependencies=("git" "python3" "virtualenv" "pip")
+declare -A dep_map_zypper
+dep_map_zypper["git"]="git"
+dep_map_zypper["python3"]="python3"
+dep_map_zypper["virtualenv"]="python3-virtualenvwrapper"
+dep_map_zypper["pip"]="pip"
+dep_map_zypper["zenity"]="zenity"
+
+declare -A dep_map_apt
+dep_map_apt["git"]="git"
+dep_map_apt["python3"]="python3"
+dep_map_apt["virtualenv"]="python3-virtualenvwrapper"
+dep_map_apt["pip"]="pip"
+dep_map_apt["zenity"]="zenity"
+
+declare -A dep_map_dnf
+dep_map_dnf["git"]="git"
+dep_map_dnf["python3"]="python3"
+dep_map_dnf["virtualenv"]="python3-virtualenvwrapper"
+dep_map_dnf["pip"]="pip"
+dep_map_dnf["zenity"]="zenity"
+
+declare -A dep_map_pacman
+dep_map_pacman["git"]="git"
+dep_map_pacman["python3"]="python3"
+dep_map_pacman["virtualenv"]="python3-virtualenvwrapper"
+dep_map_pacman["pip"]="pip"
+dep_map_pacman["zenity"]="zenity"
 
 test_binary() {
     which $1 2>/dev/null || echo FALSE
@@ -59,15 +86,15 @@ install_dependency(){
 
 
     if [ $test_apt != "FALSE" ]; then
-        install_apt "$test_su_tool" "$dependency"
+        install_apt "$test_su_tool" "${dep_map_apt[$dependency]}"
     elif [ $test_zypper != "FALSE" ]; then
-        install_zypper "$test_su_tool" "$dependency"
+        install_zypper "$test_su_tool" "${dep_map_zypper[$dependency]}"
     elif [ $test_dnf != "FALSE" ]; then
-        install_dnf "$test_su_tool" "$dependency"
+        install_dnf "$test_su_tool" "${dep_map_dnf[$dependency]}"
     elif [ $test_yum != "FALSE" ]; then
-        install_yum "$test_su_tool" "$dependency"
+        install_yum "$test_su_tool" "${dep_map_dnf[$dependency]}"
     elif [ $test_pacman != "FALSE" ]; then
-        install_pacman "$test_su_tool" "$dependency"
+        install_pacman "$test_su_tool" "${dep_map_pacman[$dependency]}"
     else
         echo "There seems to be no supported package manager installed on your system."
         echo "Please open an issue at: https://github.com/VortexAcherontic/OpenSeeFaceWrapper/issues"
