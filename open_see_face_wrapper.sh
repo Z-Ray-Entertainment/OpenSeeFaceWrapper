@@ -107,7 +107,17 @@ run_in_terminal(){
 
 test_su_tool(){
     if [ "$NO_UI" == "TRUE" ]; then
-        echo "sudo"
+        test_sudo=$(test_binary "sudo")
+        test_su=$(test_binary "su")
+
+        if [ $test_sudo != "FALSE" ]; then
+            echo "sudo"
+        elif [ $test_su != "FALSE" ]; then
+            echo "su"
+        else
+            echo "No supported su tool faound"
+            kill $PID
+        fi
     else
         test_xdgsu=$(test_binary "xdg-su")
         test_kdesu=$(test_binary "kdesu")
