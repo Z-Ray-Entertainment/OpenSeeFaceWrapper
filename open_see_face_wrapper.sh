@@ -15,11 +15,11 @@ dep_map_zypper["pip"]="pip"
 dep_map_zypper["zenity"]="zenity"
 
 declare -A dep_map_zypper_tumbleweed
-dep_map_zypper["git"]="git"
-dep_map_zypper["python3"]="python3"
-dep_map_zypper["virtualenv"]="python310-virtualenv"
-dep_map_zypper["pip"]="pip"
-dep_map_zypper["zenity"]="zenity"
+dep_map_zypper_tumbleweed["git"]="git"
+dep_map_zypper_tumbleweed["python3"]="python3"
+dep_map_zypper_tumbleweed["virtualenv"]="python310-virtualenv"
+dep_map_zypper_tumbleweed["pip"]="pip"
+dep_map_zypper_tumbleweed["zenity"]="zenity"
 
 declare -A dep_map_apt
 dep_map_apt["git"]="git"
@@ -101,10 +101,10 @@ install_dependency(){
         install_apt "$test_su_tool" "${dep_map_apt[$dependency]}"
     elif [ $test_zypper != "FALSE" ]; then
         distro_name=$(get_distro_name)
-        if [ "$distro_name" == "openSUSE Tumbleweed" ]; then
-            install_zypper "$test_su_tool" "${dep_map_zypper_tumbleweed[$dependency]}"
-        else
+        if [ "$distro_name" == *"Leap"* ]; then
             install_zypper "$test_su_tool" "${dep_map_zypper[$dependency]}"
+        else
+            install_zypper "$test_su_tool" "${dep_map_zypper_tumbleweed[$dependency]}"
         fi
     elif [ $test_dnf != "FALSE" ]; then
         install_dnf "$test_su_tool" "${dep_map_dnf[$dependency]}"
