@@ -101,15 +101,10 @@ install_dependency(){
         install_apt "$test_su_tool" "${dep_map_apt[$dependency]}"
     elif [ $test_zypper != "FALSE" ]; then
         distro_name=$(get_distro_name)
-        if [ $distro_name == "openSUSE Tumbleweed" ]; then
+        if [ "$distro_name" == "openSUSE Tumbleweed" ]; then
             install_zypper "$test_su_tool" "${dep_map_zypper_tumbleweed[$dependency]}"
-        elif [ $distro_name == "openSUSE Leap 15.4" ]; then
-            install_zypper "$test_su_tool" "${dep_map_zypper[$dependency]}"
-        elif [ $distro_name == "openSUSE Leap 15.5" ]; then
-            install_zypper "$test_su_tool" "${dep_map_zypper[$dependency]}"
         else
-            $ZENTIY --title "OpenSeeFace Wrapper" --error --text "You version of openSUSE is not yet supported. Please open an issue at $ISSUE_URL"
-            kill 0
+            install_zypper "$test_su_tool" "${dep_map_zypper[$dependency]}"
         fi
     elif [ $test_dnf != "FALSE" ]; then
         install_dnf "$test_su_tool" "${dep_map_dnf[$dependency]}"
@@ -192,7 +187,7 @@ run_open_see_face(){
     cd "./OpenSeeFace"
     virtualenv -p python3 "$PWD/env"
     source "$PWD/env/bin/activate"
-    python facetracker.py -c 0 -W 640 -H 480 --discard-after 0 --scan-every 0 --no-3d-adapt 1 --max-feature-updates 900 -s 1 --port 20202 &
+    python facetracker.py -c 1 -W 640 -H 480 --discard-after 0 --scan-every 0 --no-3d-adapt 1 --max-feature-updates 900 -s 1 --port 20202 &
     $ZENTIY --title "OpenSeeFace Wrapper" --info --text "OpenSeeFace is now running. Close this window to also stop OpenSeeFace."
     kill 0
 }
