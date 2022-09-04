@@ -12,11 +12,12 @@ test_binary() {
 }
 
 install_apt(){
-    echo "apt"
+    $1 "\"apt update\""
+    $1 "\"apt upgrade\""
+    $1 "\"apt install $2\""
 }
 
 install_zypper(){
-    echo $2
     $1 "\"zypper in $2\""
 }
 
