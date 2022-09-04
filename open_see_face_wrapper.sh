@@ -103,8 +103,6 @@ install_dependency(){
         distro_name=$(get_distro_name)
         if [ $distro_name == "openSUSE Tumbleweed" ]; then
             install_zypper "$test_su_tool" "${dep_map_zypper_tumbleweed[$dependency]}"
-        elif [ $distro_name == "openSUSE MicroOS" ]; then
-            install_zypper "$test_su_tool" "${dep_map_zypper_tumbleweed[$dependency]}"
         elif [ $distro_name == "openSUSE Leap 15.4" ]; then
             install_zypper "$test_su_tool" "${dep_map_zypper[$dependency]}"
         elif [ $distro_name == "openSUSE Leap 15.5" ]; then
