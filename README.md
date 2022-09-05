@@ -36,7 +36,7 @@ In order to run OpenSeeFace and the script itself it will install the following 
 * python3  
 * virtualenv  
 * pip  
-* zentiy
+* zenity
 
 ## Distribution support
 ### Working
