@@ -245,7 +245,7 @@ clone_open_see_face(){
 }
 
 setup_open_see_face(){
-    cd "./OpenSeeFace"
+    cd "$OPEN_SEE_FACE_INSTALL_PATH/OpenSeeFace"
     virtualenv -p python3 "$PWD/env"
     source "$PWD/env/bin/activate"
     pip install onnxruntime opencv-python pillow numpy
