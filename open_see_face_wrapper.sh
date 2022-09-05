@@ -84,23 +84,25 @@ run_in_terminal(){
     test_xterm=$(test_binary "xterm")
     test_alacritty=$(test_binary "alacritty")
 
-    if [ $test_gnome_terminal == "TRUE" ]; then
+    if [ $test_gnome_terminal != "FALSE" ]; then
         gnome-terminal --tab -- "$PWD/$SCRIPT_NAME --no-ui"
-    elif [ $test_konsole == "TRUE" ]; then
+    elif [ $test_konsole != "FALSE" ]; then
         konsole -e "$PWD/$SCRIPT_NAME --no-ui"
-    elif [ $test_xfce_terminal == "TRUE" ]; then
+    elif [ $test_xfce_terminal != "FALSE" ]; then
         echo "xfce terminal"
-    elif [ $test_lxterminal == "TRUE" ]; then
+    elif [ $test_lxterminal != "FALSE" ]; then
         echo "lxterminal"
-    elif [ $test_xterm == "TRUE" ]; then
+    elif [ $test_xterm != "FALSE" ]; then
         echo "xterm"
-    elif [ $test_alacritty == "TRUE" ]; then
+    elif [ $test_alacritty != "FALSE" ]; then
         echo "alacritty"
     else
         if [ "$NO_UI" == "TRUE" ]; then
             echo "I was not able to identify your terminal emulator. Please run this script manually from a terminal session."
+            kill $PID
         else
             $ZENTIY --title "OpenSeeFace Wrapper" --info --text "I was not able to identify your terminal emulator. Please run this script manually from a terminal session."
+            kill $PID
         fi
     fi
 }
