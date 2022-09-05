@@ -235,7 +235,7 @@ clone_open_see_face(){
         install_confimed=$?
         if [ $install_confimed -eq 0 ]; then
             git clone $OPEN_SEE_FACE_URL "$OPEN_SEE_FACE_INSTALL_PATH/OpenSeeFace"
-            feedback "OpenSeeFace installed" "--info"
+            feedback "OpenSeeFace installed." "--info"
         else
             feedback "Alright, I am exiting now and will not install OpenSeeFace or any of it's dependecies. Have a great day!" "--info"
             kill $PID
@@ -245,12 +245,14 @@ clone_open_see_face(){
 }
 
 setup_open_see_face(){
+    feedback "Setting up OpenSeeFace environment..." "--info"
     last_dir=$PWD
     cd "$OPEN_SEE_FACE_INSTALL_PATH/OpenSeeFace"
     virtualenv -p python3 "$PWD/env"
     source "$PWD/env/bin/activate"
     pip install onnxruntime opencv-python pillow numpy
     cd "$last_dir"
+    feedback "OpenSeeFace Environment created" "--info"
 }
 
 run_open_see_face(){
