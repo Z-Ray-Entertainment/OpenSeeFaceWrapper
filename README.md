@@ -30,6 +30,7 @@ Planed for future version if required:
 * emerge (Gentoo)  
 * transactional-update (openSUSE MicroOS)
 
+### Requirements which get installed
 In order to run OpenSeeFace and the script itself it will install the following packages if missing:  
 * git  
 * python3  
