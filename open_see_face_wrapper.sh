@@ -51,6 +51,14 @@ if [ "$1" == "--no-ui" ]; then
     NO_UI="TRUE"
 fi
 
+feedback(){
+    if [ $NO_UI == "TRUE" ]; then
+        echo $1
+    else
+        $ZENTIY $ZENTIY --title "OpenSeeFace Wrapper" $2 --text "$1"
+    fi
+}
+
 test_binary() {
     which $1 2>/dev/null || echo FALSE
 }
@@ -98,13 +106,8 @@ run_in_terminal(){
     elif [ $test_alacritty != "FALSE" ]; then
         echo "alacritty"
     else
-        if [ "$NO_UI" == "TRUE" ]; then
-            echo "I was not able to identify your terminal emulator. Please run this script manually from a terminal session."
-            kill $PID
-        else
-            $ZENTIY --title "OpenSeeFace Wrapper" --info --text "I was not able to identify your terminal emulator. Please run this script manually from a terminal session."
-            kill $PID
-        fi
+        feedback "I was not able to identify your terminal emulator. Please run this script manually from a terminal session." "--info"
+        kill $PID
     fi
 }
 
@@ -134,8 +137,8 @@ test_su_tool(){
         elif [ $test_gnomesu != "FALSE" ]; then
             echo "gnomesu -c"
         else
-            $ZENTIY --title "OpenSeeFace Wrapper" --info --text "It seems there is no UI based root password confirmation dialog available on your system. \
-            I'll try to run this script from a terminal session."
+            feedback "It seems there is no UI based root password confirmation dialog available on your system. \
+            I'll try to run this script from a terminal session." "--info"
             run_in_terminal
         fi
     fi
@@ -171,8 +174,7 @@ install_dependency(){
     elif [ $test_pacman != "FALSE" ]; then
         install_pacman "$test_su_tool" "${dep_map_pacman[$dependency]}"
     else
-        echo "There seems to be no supported package manager installed on your system."
-        echo "Please open an issue at: $ISSUE_URL"
+        feedback "There seems to be no supported package manager installed on your system.\nPlease open an issue at: $ISSUE_URL" "--info"
     fi
 }
 
@@ -191,11 +193,7 @@ check_and_install_dependencies(){
                     $ZENTIY --title "OpenSeeFace Wrapper" --info --text "$i was installed on to your system, continue."
                 fi
             else
-                if [ "$NO_UI" == "TRUE" ]; then
-                    echo "Alright, I am exiting now and will not install OpenSeeFace or any of it's dependecies. Have a great day!"
-                else
-                    $ZENTIY --title "OpenSeeFace Wrapper" --info --text "Alright, I am exiting now and will not install OpenSeeFace or any of it's dependecies. Have a great day!"
-                fi
+                feedback "Alright, I am exiting now and will not install OpenSeeFace or any of it's dependecies. Have a great day!" "--info"
                 kill $PID
             fi
         fi
@@ -237,8 +235,9 @@ clone_open_see_face(){
         install_confimed=$?
         if [ $install_confimed -eq 0 ]; then
             git clone $OPEN_SEE_FACE_URL "$OPEN_SEE_FACE_INSTALL_PATH/OpenSeeFace"
+            feedback "OpenSeeFace installed" "--info"
         else
-            $ZENTIY --title "OpenSeeFace Wrapper" --info --text "Alright, I am exiting now and will not install OpenSeeFace or any of it's dependecies. Have a great day!"
+            feedback "Alright, I am exiting now and will not install OpenSeeFace or any of it's dependecies. Have a great day!" "--info"
             kill $PID
         fi
 
@@ -259,7 +258,11 @@ run_open_see_face(){
     source "$PWD/env/bin/activate"
     python facetracker.py -c 0 -W 640 -H 480 --discard-after 0 --scan-every 0 --no-3d-adapt 1 --max-feature-updates 900 -s 1 --port 20202 &
     pid_osf=${!}
-    $ZENTIY --title "OpenSeeFace Wrapper" --info --text "OpenSeeFace is now running. Close this window to also stop OpenSeeFace."
+    feedback "OpenSeeFace is now running. Close this window to also stop OpenSeeFace." "--info"
+    if [ $NO_UI == "TRUE" ]; then
+        echo "Press any key to quit!"
+        read -p prompt
+    fi
     kill $pid_osf
     kill $PID
 }
@@ -270,7 +273,7 @@ if [ $install_complete == "TRUE" ]; then
     run_open_see_face
 else
     test_and_install_zentiy
-    $ZENTIY --title "OpenSeeFace Wrapper" --info --text "Welcome to OpenSeeFace Wrapper, this tool will install and run OpenSeeFace for you"
+    feedback "Welcome to OpenSeeFace Wrapper, this tool will install and run OpenSeeFace for you" "--info"
     check_and_install_dependencies
     clone_open_see_face
     setup_open_see_face
