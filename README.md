@@ -37,7 +37,20 @@ In order to run OpenSeeFace and the script itself it will install the following 
 * pip  
 * zentiy
 
-## Tested on
+## Distribution support
+### Working
 This script was tested and found working on the following distributions  
 * openSUSE Tumbleweed  
 * openSUSE Leap 15.4  
+
+### Under development
+The script is currently being adjusted to work with the following Distributions:  
+* Debian 11 (see Issue #5)
+
+### Planed
+The script is planed to be also adjusted for the following distributions:  
+* Fedora 36 (Issue #7)  
+* EndevourOS (Issue #6)  
+* Ubuntu 22.04 LTS (Issue #8)  
+
+If your distribution is based on something of the above the script should work there as well.
