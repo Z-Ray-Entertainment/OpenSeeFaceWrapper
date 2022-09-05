@@ -1,5 +1,5 @@
 # OpenSeeFaceWrapper
-A UI based shell script to downalod, setup and run OpenSeeFace on Linux with just a simple click.
+A UI based shell script to downalod, setup and run OpenSeeFaces Facetracker on Linux for the likes of VTube Studio with just a simple click.
 
 ## Usage
 * Download the open_see_face_wrapper script to your computer
