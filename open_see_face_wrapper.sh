@@ -110,10 +110,10 @@ test_su_tool(){
         test_sudo=$(test_binary "sudo")
         test_su=$(test_binary "su")
 
-        if [ $test_sudo != "FALSE" ]; then
+        if [ $test_su != "FALSE" ]; then
+            echo "su -c"
+        elif [ $test_sudo != "FALSE" ]; then
             echo "sudo"
-        elif [ $test_su != "FALSE" ]; then
-            echo "su"
         else
             echo "No supported su tool faound"
             kill $PID
