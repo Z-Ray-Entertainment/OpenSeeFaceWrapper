@@ -5,6 +5,7 @@ NO_UI="false"
 
 ZENTIY="zenity"
 OPEN_SEE_FACE_URL="https://github.com/emilianavt/OpenSeeFace.git"
+OPEN_SEE_FACE_INSTALL_PATH="$HOME/.local/share/"
 ISSUE_URL="https://github.com/VortexAcherontic/OpenSeeFaceWrapper/issues"
 
 open_see_face_cloned="FALSE"
@@ -211,7 +212,7 @@ test_and_install_zentiy(){
 }
 
 is_installation_complete(){
-    if [ -d "$PWD/OpenSeeFace" ]; then
+    if [ -d "$OPEN_SEE_FACE_INSTALL_PATH/OpenSeeFace" ]; then
         open_see_face_cloned="TRUE"
     fi
 
@@ -235,7 +236,7 @@ clone_open_see_face(){
         $ZENTIY --title "OpenSeeFace Wrapper" --question --text "It seems OpenSeeFace is not installed on your system. Do you want me to install it for you?"
         install_confimed=$?
         if [ $install_confimed -eq 0 ]; then
-            git clone $OPEN_SEE_FACE_URL
+            git clone $OPEN_SEE_FACE_URL "$OPEN_SEE_FACE_INSTALL_PATH/OpenSeeFace"
         else
             $ZENTIY --title "OpenSeeFace Wrapper" --info --text "Alright, I am exiting now and will not install OpenSeeFace or any of it's dependecies. Have a great day!"
             kill $PID
