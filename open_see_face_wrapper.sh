@@ -5,7 +5,7 @@ NO_UI="false"
 
 ZENTIY="zenity"
 OPEN_SEE_FACE_URL="https://github.com/emilianavt/OpenSeeFace.git"
-OPEN_SEE_FACE_INSTALL_PATH="$HOME/.local/share/"
+OPEN_SEE_FACE_INSTALL_PATH="$HOME/.local/share/OpenSeeFace/"
 ISSUE_URL="https://github.com/VortexAcherontic/OpenSeeFaceWrapper/issues"
 
 open_see_face_cloned="FALSE"
@@ -125,12 +125,14 @@ test_su_tool(){
             kill $PID
         fi
     else
+        test_pkexec=$(test_binary "pkexec")
         test_xdgsu=$(test_binary "xdg-su")
         test_kdesu=$(test_binary "kdesu")
         test_gnomesu=$(test_binary "gnomesu")
 
-
-        if [ $test_xdgsu != "FALSE" ]; then
+        if [ $test_pkexec != "FALSE" ]; then
+            echo "pkexec"
+        elif [ $test_xdgsu != "FALSE" ]; then
             echo "xdg-su -u root -c"
         elif [ $test_kdesu != "FALSE" ]; then
             echo "kdesu -c"
@@ -210,7 +212,7 @@ test_and_install_zentiy(){
 }
 
 is_installation_complete(){
-    if [ -d "$OPEN_SEE_FACE_INSTALL_PATH/OpenSeeFace" ]; then
+    if [ -d "$OPEN_SEE_FACE_INSTALL_PATH" ]; then
         open_see_face_cloned="TRUE"
     fi
 
@@ -234,7 +236,7 @@ clone_open_see_face(){
         $ZENTIY --title "OpenSeeFace Wrapper" --question --text "It seems OpenSeeFace is not installed on your system. Do you want me to install it for you?"
         install_confimed=$?
         if [ $install_confimed -eq 0 ]; then
-            git clone $OPEN_SEE_FACE_URL "$OPEN_SEE_FACE_INSTALL_PATH/OpenSeeFace"
+            git clone $OPEN_SEE_FACE_URL "$OPEN_SEE_FACE_INSTALL_PATH"
             feedback "OpenSeeFace installed." "--info"
         else
             feedback "Alright, I am exiting now and will not install OpenSeeFace or any of it's dependecies. Have a great day!" "--info"
@@ -247,7 +249,7 @@ clone_open_see_face(){
 setup_open_see_face(){
     feedback "Setting up OpenSeeFace environment..." "--info"
     last_dir=$PWD
-    cd "$OPEN_SEE_FACE_INSTALL_PATH/OpenSeeFace"
+    cd "$OPEN_SEE_FACE_INSTALL_PATH"
     virtualenv -p python3 "$PWD/env"
     source "$PWD/env/bin/activate"
     pip install onnxruntime opencv-python pillow numpy
@@ -256,7 +258,7 @@ setup_open_see_face(){
 }
 
 run_open_see_face(){
-    cd "$OPEN_SEE_FACE_INSTALL_PATH/OpenSeeFace"
+    cd "$OPEN_SEE_FACE_INSTALL_PATH"
     virtualenv -p python3 "$PWD/env"
     source "$PWD/env/bin/activate"
     python facetracker.py -c 0 -W 640 -H 480 --discard-after 0 --scan-every 0 --no-3d-adapt 1 --max-feature-updates 900 -s 1 --port 20202 &
