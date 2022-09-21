@@ -64,13 +64,23 @@ test_binary() {
 }
 
 install_apt(){
-    $1 "apt -y update"
-    $1 "apt -y upgrade"
-    $1 "apt -y install $2"
+    if [ $1 == "pkexec" ]; then
+        $1 apt -y update
+        $1 apt -y upgrade
+        $1 apt -y install $2
+    else
+        $1 "apt -y update"
+        $1 "apt -y upgrade"
+        $1 "apt -y install $2"
+    fi
 }
 
 install_zypper(){
-    $1 "zypper in -y $2"
+    if [ $1 == "pkexec" ]; then
+        $1 zypper in -y $2
+    else
+        $1 "zypper in -y $2"
+    fi
 }
 
 install_dnf(){
@@ -82,7 +92,11 @@ install_yum(){
 }
 
 install_pacman(){
-    $1 "\"pacman -Syu $2\""
+    if [ $1 == "pkexec" ]; then
+        $1 pacman -Syu $2
+    else
+        $1 "pacman -Syu $2"
+    fi
 }
 
 run_in_terminal(){
